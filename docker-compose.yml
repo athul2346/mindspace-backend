@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    container_name: mindspace_db
+    restart: always
+    environment:
+      POSTGRES_USER: mindspace
+      POSTGRES_PASSWORD: mindspace_secret
+      POSTGRES_DB: mindspace
+    ports:
+      - "5432:5432"
+    volumes:
+      - mindspace_pgdata:/var/lib/postgresql/data
+
+volumes:
+  mindspace_pgdata:
