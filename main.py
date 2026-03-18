@@ -40,6 +40,7 @@ groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 class ChatMessage(BaseModel):
     session_id: str
     message: str
+    hour: int = -1
 
 class MoodRequest(BaseModel):
     session_id: str
@@ -99,7 +100,7 @@ async def start_session(body: ChatMessage, db: Session = Depends(get_db)):
 
     get_or_create_session(session_id, db)
 
-    hour = datetime.now().hour
+    hour = body.hour if body.hour >= 0 else datetime.now().hour
     if hour < 12:
         time_context = "It is morning."
     elif hour < 17:
