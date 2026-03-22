@@ -53,3 +53,13 @@ class Message(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     session = relationship("Session", back_populates="messages")
+
+
+class FeedbackLog(Base):
+    __tablename__ = "feedback_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    session_id = Column(String, nullable=False)
+    feeling = Column(String, nullable=False)
+    improvement = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from database import get_db, engine
-from models import Base, Session as DBSession, Message, MoodLog, JournalEntry
+from models import Base, Session as DBSession, Message, MoodLog, JournalEntry, FeedbackLog
 from groq import Groq
 import os
 import re
@@ -52,6 +52,11 @@ class JournalRequest(BaseModel):
     content: str
     mood: str = ""
 
+
+class FeedbackRequest(BaseModel):
+    session_id: str
+    feeling: str
+    improvement: str
 
 # ── Helpers ─────────────────────────────────────────────────
 
@@ -242,3 +247,15 @@ async def get_journal_entries(session_id: str, db: Session = Depends(get_db)):
             for e in entries
         ]
     }
+
+
+@app.post("/feedback")
+async def save_feedback(body: FeedbackRequest, db: Session = Depends(get_db)):
+    entry = FeedbackLog(
+        session_id=body.session_id,
+        feeling=body.feeling,
+        improvement=body.improvement,
+    )
+    db.add(entry)
+    db.commit()
+    return {"status": "saved"}
