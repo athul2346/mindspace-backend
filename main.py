@@ -61,7 +61,7 @@ def format_response(text: str) -> str:
 
 def groq_chat(messages: list, max_tokens: int = 1024) -> str:
     response = groq_client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="llama-3.3-70b-versatile",
         messages=messages,
         max_tokens=max_tokens,
     )
